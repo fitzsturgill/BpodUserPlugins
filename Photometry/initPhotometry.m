@@ -6,9 +6,16 @@ function S = initPhotometry(S)
     daq.reset;
     
     % retrieve machine specific settings
-    addpath(genpath(fullfile(BpodSystem.BpodPath, 'Settings Files'))); % Settings path is assumed to be shielded by gitignore file
-    phSettings = machineSpecific_Photometry;
-    rmpath(genpath(fullfile(BpodSystem.BpodPath, 'Settings Files'))); % remove it just in case there would somehow be a name conflict
+    try
+        addpath(genpath(fullfile(BpodSystem.BpodUserPath, 'Settings Files'))); % Settings path is assumed to be shielded by gitignore file
+        phSettings = machineSpecific_Photometry;
+        rmpath(genpath(fullfile(BpodSystem.BpodUserPath, 'Settings Files'))); % remove it just in case there would somehow be a name conflict        
+    catch
+        addpath(genpath(fullfile(BpodSystem.BpodPath, 'Settings Files'))); % Settings path is assumed to be shielded by gitignore file
+        phSettings = machineSpecific_Photometry;
+        rmpath(genpath(fullfile(BpodSystem.BpodPath, 'Settings Files'))); % remove it just in case there would somehow be a name conflict
+    end
+        
     
 %     % defaults
 %     phDefaults = {...
