@@ -55,7 +55,7 @@ function demod = phDemod(rawData, refData, sampleRate, modRate, lowCutoff)
     lowCutoff = lowCutoff/sampleRate * 2; % multiply by 2 to convert to rad/sample- see butter documentation
     % for a cutoff freq of 300Hz and sample rate of 1000Hz, cutoff
     % corresponds to 0.6pi rad/sample    300/1000 * 2 = 0.6    
-    [b, a] = butter(10, lowCutoff, 'low');   % double order of butterworth filter since I'm not using filtfilt
+    [b, a] = butter(5, lowCutoff, 'low');   % double order of butterworth filter since I'm not using filtfilt
     pad = 1;
     if pad
 %         paddedData = fliplr(demodData(1:sampleRate, 1)); % pad with 1s of reflected data
