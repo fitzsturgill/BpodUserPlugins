@@ -87,8 +87,11 @@ function demod = phDemod(rawData, refData, sampleRate, modRate, lowCutoff)
     % Vsig = Vsig*Vref/2 + Vsig*Vref/2 * Cos(2*Fmod * time)
     % you filter out the second term
     % multiply by two and divide by Vref to get Vsig
-
-    modAmp = calcSinusoidAmp(refData);
+    try % why am I demodulating both channels by default???  Note  3/28/17
+        modAmp = calcSinusoidAmp(refData);
+    catch
+        modAmp = 1;
+    end
     demod = demod * 2 / modAmp;
 %     fig = ensureFigure('test', 1);
 %     plot(demodDataFilt);
