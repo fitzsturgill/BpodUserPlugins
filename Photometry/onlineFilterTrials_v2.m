@@ -19,4 +19,5 @@ function out = onlineFilterTrials_v2(varargin)
         out = out & theseMatches;
         counter=counter+2;
     end
+    out = find(out);
     

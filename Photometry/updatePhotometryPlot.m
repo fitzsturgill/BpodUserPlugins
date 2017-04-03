@@ -31,7 +31,7 @@ function updatePhotometryPlot(Op, startX)
      
         case 'update'
 
-            xData = nidaq.online.currentXData - startX;
+            xData = nidaq.online.currentXData + startX;
             if channelsOn(1)
                 demod_ch1 = nidaq.online.currentDemodData{1};
                 plot(BpodSystem.ProtocolFigures.NIDAQPanel1,xData, demod_ch1);

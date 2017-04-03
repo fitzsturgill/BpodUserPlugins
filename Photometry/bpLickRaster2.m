@@ -1,22 +1,20 @@
-function [ax, lh] = bpLickRaster2(SessionData, filtArg, zeroField, figName, ax)
+function [ax, lh] = bpLickRaster2(filtArg, zeroField, figName, ax)
         % create lickRaster for an individual session
         % optional arguments: if you want to use a preexisting axis,
         % then pass '' to figName and pass the axes handle
-        
         % zerofield: string, e.g. 'DeliverStimulus'
-    if nargin < 4
+    if nargin < 3
         figName = 'lickRaster';
     end
     
     if ~isempty(figName)
-        fig = ensureFigure(figName, 1);
+        fig = ensureFigure(figName);
     else
         fig = gcf;
-        clf;
     end
 
     
-    if nargin < 5 %make a new axes unless one is provided
+    if nargin < 4 %make a new axes unless one is provided
         ax=axes(...
         'Parent', fig,...
         'YDir', 'reverse'...
