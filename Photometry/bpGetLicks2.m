@@ -1,7 +1,11 @@
-function [lickTimes, lickTrials, nTrials] = bpGetLicks2(filtArg, zeroField)
+function [lickTimes, lickTrials, nTrials] = bpGetLicks2(filtArg, zeroField, trialMode)
     global BpodSystem
     if nargin < 2
         zeroField = '';
+    end
+    
+    if nargin < 3
+        trialMode = 'consecutive'; % consecutive or session
     end
 
 
@@ -22,8 +26,14 @@ function [lickTimes, lickTrials, nTrials] = bpGetLicks2(filtArg, zeroField)
                 end
                 theseLicks = theseLicks - zeroTime;
                 lickTimes = [lickTimes theseLicks];
-                lickTrials = [lickTrials zeros(1, length(theseLicks)) + i];
-
+                switch trialMode
+                    case 'consecutive'
+                        lickTrials = [lickTrials zeros(1, length(theseLicks)) + i];
+                    case 'session'
+                        lickTrials = [lickTrials zeros(1, length(theseLicks)) + trial];
+                    otherwise
+                        error('incorrect trial mode');
+                end
             else
                 continue;
     %             lickTimes(end + 1) = NaN; % else add a dummy lick at time 0 so that you make an empty line on the raster
