@@ -36,7 +36,7 @@ function [ax, lh] = bpLickRaster2(filtArg, zeroField, figName, ax, trialMode)
     try
         set(ax, 'YLim', [0, max(nLickTrials, 1)]);
     catch
-        disp('wtf');
+        set(ax, 'YLim', [0, 1]);
     end
         
 
