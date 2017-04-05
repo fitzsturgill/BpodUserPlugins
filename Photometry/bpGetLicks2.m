@@ -5,7 +5,7 @@ function [lickTimes, lickTrials, nTrials] = bpGetLicks2(filtArg, zeroField)
     end
 
 
-    trials = onlineFilterTrials_v2(filtArg{1, :});
+    trials = find(onlineFilterTrials_v2(filtArg{1, :}));
     nTrials = length(trials);
     
     lickTimes = [];
