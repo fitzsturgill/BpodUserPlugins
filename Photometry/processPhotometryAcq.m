@@ -2,7 +2,7 @@ function processPhotometryAcq(currentTrial)
     global BpodSystem nidaq
     
     
-    pause(0.05); 
+    pause(0.1); 
     nidaq.session.stop() % Kills ~0.002 seconds after state matrix is done.
 %     wait(nidaq.session) % Trying to wait until session is done - did we record the full session?
     
@@ -12,5 +12,12 @@ function processPhotometryAcq(currentTrial)
     %% Save data in BpodSystem format.
     BpodSystem.Data.NidaqData{currentTrial, 1} = nidaq.ai_data; %input data
     BpodSystem.Data.NidaqData{currentTrial, 2} = nidaq.ao_data; % output data
+    
+    if isempty(nidaq.ai_data)
+        disp(num2str(toc));
+        error('WTF');
+    else
+        disp(num2str(toc));
+    end
     
     
