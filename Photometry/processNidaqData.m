@@ -2,6 +2,7 @@ function processNidaqData(src,event)
     % callback function, session assummed to be non-continuous with
     % dataAvailableExceeds == SampleRate * Duration
     global nidaq
+    
     nidaq.ai_data = event.Data; % for non-continuous acquisition     
     correctSamples = nidaq.duration * nidaq.sample_rate;
     nSamples = size(nidaq.ai_data, 1);
