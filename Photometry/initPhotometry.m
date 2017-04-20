@@ -3,6 +3,7 @@ function S = initPhotometry(S)
     %% NIDAQ :: Set up NIDAQ data aquisision
     global nidaq BpodSystem
 
+    return
     daq.reset;
     
     % retrieve machine specific settings
@@ -56,8 +57,8 @@ function S = initPhotometry(S)
     nidaq.LED1_amp = S.GUI.LED1_amp;
     nidaq.LED2_f = S.nidaq.LED2_f;
     nidaq.LED2_amp = S.GUI.LED2_amp;    
-    nidaq.duration                 = S.nidaq.duration;        
-    nidaq.sample_rate              = S.nidaq.sample_rate;     %
+    nidaq.duration                 = S.nidaq.duration;
+    nidaq.sample_rate              = S.nidaq.sample_rate;
    
     nidaq.ai_channelNames          = S.nidaq.ai_channelNames;       % 4 channels might make sense to have 2 supplementary channels for fast photodiodes measuring excitation light later
     nidaq.ai_data = [];
