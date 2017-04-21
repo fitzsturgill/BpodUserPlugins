@@ -1,17 +1,25 @@
-function updateLEDData(S)
-    
+function ref = updateLEDData(S)
+    % updated 4/21/2017
     global nidaq
 
     % generate output data
-    nidaq.dt = 1/nidaq.sample_rate;
-    t = 0:nidaq.dt:nidaq.duration - nidaq.dt; %last sample starts dt prior to t = duration
-    LED1_data = (sin(2*pi*S.nidaq.LED1_f*t) + 1) /2 * S.GUI.LED1_amp;
-%     LED1_data = zeros(1, length(t)) + .7;
-    LED2_data = (sin(2*pi*S.nidaq.LED2_f*t) + 1) /2 * S.GUI.LED2_amp;
-    LED1_data = [LED1_data]';
-    LED2_data = [LED2_data]';
-
-    
-    nidaq.ao_data = [LED1_data LED2_data];
-    
+    nidaq.dt = 1/nidaq.sample_rate;    
+    t = (0:nidaq.dt:nidaq.duration - nidaq.dt)'; %last sample starts dt prior to t = duration
+    nidaq.ao_data = [];
+    ref = struct(...
+        'phaseShift', [],...
+        'freq', [],...
+        'amp', []...
+        );
+    for ch = nidaq.channelsOn
+        phaseShift = rand(1) * 2 * pi;
+        freq = S.nidaq.(['LED' num2str(ch) '_f']);
+        amp = S.GUI.(['LED' num2str(ch) '_amp']);
+        channelData = (sin(2*pi*freq*t + phaseShift) + 1) /2 * S.GUI.LED1_amp;
+        nidaq.ao_data = [nidaq.ao_data channelData];
+        ref.phaseShift(end + 1) = phaseShift;
+        ref.freq(end + 1) = freq;
+        ref.amp(end + 1) = amp;
+    end
+    nidaq.ao_data = channelData;    
     nidaq.session.queueOutputData(nidaq.ao_data);

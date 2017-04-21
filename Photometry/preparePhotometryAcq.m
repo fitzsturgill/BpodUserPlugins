@@ -116,6 +116,9 @@ function S = preparePhotometryAcq(S)
     nidaq.session.IsContinuous = false;
     
     %% create and cue data for output, add callback function
+%         ref.phaseShift
+%         ref.freq
+%         ref.amp
     updateLEDData(S); 
     % data available notify must be set after queueing data
     nidaq.session.NotifyWhenDataAvailableExceeds = nidaq.duration * nidaq.sample_rate; % at end of complete acquisition     
