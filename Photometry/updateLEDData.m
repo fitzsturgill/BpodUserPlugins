@@ -1,4 +1,4 @@
-function ref = updateLEDData(S)
+function updateLEDData(S)
     % updated 4/21/2017
     global nidaq
 
@@ -21,5 +21,7 @@ function ref = updateLEDData(S)
         ref.freq(end + 1) = freq;
         ref.amp(end + 1) = amp;
     end
+    ref.channelsOn = nidaq.channelsOn;
+    nidaq.ref = ref;
     nidaq.ao_data = channelData;    
     nidaq.session.queueOutputData(nidaq.ao_data);

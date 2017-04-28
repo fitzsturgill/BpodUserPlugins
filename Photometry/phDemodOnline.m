@@ -6,11 +6,11 @@ function phDemodOnline(currentTrial)
     LED1_f = nidaq.LED1_f;
     LED2_f = nidaq.LED2_f;
     
-    if nidaq.LED1_amp > 0
-        nidaq.online.currentDemodData{1} = phDemod(nidaq.ai_data(:,1), nidaq.ao_data(:,1), nidaq.sample_rate, LED1_f, lowCutoff);
-    else
-        nidaq.online.currentDemodData{1} = NaN(size(nidaq.ai_data(:,1)));
+    for ch = nidaq.channelsOn
+        nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,1), nidaq.ao_data(:,1), nidaq.sample_rate, LED1_f, lowCutoff);
     end
+%         nidaq.online.currentDemodData{1} = NaN(size(nidaq.ai_data(:,1)));
+%     end
     if nidaq.LED2_amp > 0    
         nidaq.online.currentDemodData{2} = phDemod(nidaq.ai_data(:,2), nidaq.ao_data(:,2), nidaq.sample_rate, LED2_f, lowCutoff);    
     else

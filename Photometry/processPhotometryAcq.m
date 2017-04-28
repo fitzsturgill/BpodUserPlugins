@@ -14,9 +14,9 @@ function processPhotometryAcq(currentTrial)
     % ensure outputs reset to zerof
 %     nidaq.session.outputSingleScan(zeros(1,length(nidaq.aoChannels)));
 
-    %% Save data in BpodSystem format.
-    BpodSystem.Data.NidaqData{currentTrial, 1} = nidaq.ai_data; %input data
-    BpodSystem.Data.NidaqData{currentTrial, 2} = nidaq.ao_data; % output data
+    %% Save data in BpodSystem format.   
+    BpodSystem.Data.NidaqData{currentTrial, ch} = nidaq.ai_data; %input data
+    BpodSystem.Data.NidaqData{currentTrial, 2} = nidaq.ref; % output data
     
     if isempty(nidaq.ai_data)
         disp(num2str(toc));
