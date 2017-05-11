@@ -23,32 +23,29 @@ function demod = phDemod(rawData, refData, sampleRate, modRate, lowCutoff)
 %     rawData(:,1) = rawData; % ensure column vectors
 %     refData(:,1) = refData; 
 
-
-    nSamples = length(rawData);
-
-    refData = refData(1:nSamples,1); % shorten refData to same size as rawData
     
-    refData = refData - mean(refData); % *** get rid of DC offset!!!!
-    
-%     if ~isempty(tBaseline)
-%         useForBaseline = rawData(1:floor(tBaseline / (1/sampleRate)));        
-% %         [processedData, ~, ~] = zscoreByRange(rawData, 1, preSamples);
-%     else
-%         useForBaseline = rawData; 
-% %         [processedData, ~, ~] = zscore(rawData);        % just use the whole thing
-%     end
-%     blMean = mean(useForBaseline);
-%     blSD = std(useForBaseline);    
-%     refData = 
-%     [refData, ~, ~] = zscore(refData);
+    if ~isstructure(refData)
+        nSamples = length(rawData);
+        refData = refData(1:nSamples,1); % shorten refData to same size as rawData    
+        refData = refData - mean(refData); % *** get rid of DC offset!!!!
 
-    % generate 90degree shifted copy of refData
-    samplesPerPeriod = 1/modRate / (1/sampleRate);
-    quarterPeriod = round(samplesPerPeriod / 4); % ideally you shouldn't have to round, i.e. mod frequencies should be close to factors of sample freq
-    refData90 = circshift(refData, [1 quarterPeriod]);
+        % generate 90degree shifted copy of refData
+        samplesPerPeriod = 1/modRate / (1/sampleRate);
+        quarterPeriod = round(samplesPerPeriod / 4); % ideally you shouldn't have to round, i.e. mod frequencies should be close to factors of sample freq
+        refData90 = circshift(refData, [1 quarterPeriod]);
 
-    processedData_0 = rawData .* refData;
-    processedData_90 = rawData .* refData90;
+        processedData_0 = rawData .* refData;
+        processedData_90 = rawData .* refData90;
+    else
+        phaseShift = rand(1) * 2 * pi;
+        freq = S.nidaq.(['LED' num2str(ch) '_f']);
+        amp = S.GUI.(['LED' num2str(ch) '_amp']);
+        channelData = (sin(2*pi*freq*t + phaseShift) + 1) /2 * S.GUI.LED1_amp;
+        nidaq.ao_data = [nidaq.ao_data channelData];
+        ref.phaseShift(end + 1) = phaseShift;
+        ref.freq(end + 1) = freq;
+        ref.amp(end + 1) = amp;
+    end
     %% try filtering first
     % note-   5 pole Butterworth filter in Matlab used in Frohlich and McCormick  
      % Create butterworth filter

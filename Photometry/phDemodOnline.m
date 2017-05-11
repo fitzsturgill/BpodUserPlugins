@@ -11,11 +11,11 @@ function phDemodOnline(currentTrial)
     end
 %         nidaq.online.currentDemodData{1} = NaN(size(nidaq.ai_data(:,1)));
 %     end
-    if nidaq.LED2_amp > 0    
-        nidaq.online.currentDemodData{2} = phDemod(nidaq.ai_data(:,2), nidaq.ao_data(:,2), nidaq.sample_rate, LED2_f, lowCutoff);    
-    else
-        nidaq.online.currentDemodData{2} = NaN(size(nidaq.ai_data(:,2)));
-    end
+%     if nidaq.LED2_amp > 0    
+%         nidaq.online.currentDemodData{2} = phDemod(nidaq.ai_data(:,2), nidaq.ao_data(:,2), nidaq.sample_rate, LED2_f, lowCutoff);    
+%     else
+%         nidaq.online.currentDemodData{2} = NaN(size(nidaq.ai_data(:,2)));
+%     end
     %% generate x data, scale from 0 initially (you can add/subtract offsets to x data within downstream funtions)
     dT = 1/nidaq.sample_rate;
     nidaq.online.currentXData = 0:dT:nidaq.duration - dT;
