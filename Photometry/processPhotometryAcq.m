@@ -15,8 +15,8 @@ function processPhotometryAcq(currentTrial)
 %     nidaq.session.outputSingleScan(zeros(1,length(nidaq.aoChannels)));
 
     %% Save data in BpodSystem format.   
-    BpodSystem.Data.NidaqData{currentTrial, ch} = nidaq.ai_data; %input data
-    BpodSystem.Data.NidaqData{currentTrial, 2} = nidaq.ref; % output data
+    BpodSystem.Data.NidaqData{currentTrial, 1} = nidaq.ai_data; %input data
+    BpodSystem.Data.NidaqData{currentTrial, 2} = nidaq.ref; % output data, now just parameters 5/29/17
     
     if isempty(nidaq.ai_data)
         disp(num2str(toc));

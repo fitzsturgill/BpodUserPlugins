@@ -4,7 +4,7 @@ function S = initPhotometry(S)
     global nidaq BpodSystem
 
     return
-    daq.reset;
+    daq.reset; % I'm testing re-initializing nidaq with every acquisition- see preparePhotometryAcq
     
     % retrieve machine specific settings
     try

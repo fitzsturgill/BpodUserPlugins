@@ -23,5 +23,4 @@ function updateLEDData(S)
     end
     ref.channelsOn = nidaq.channelsOn;
     nidaq.ref = ref;
-    nidaq.ao_data = channelData;    
     nidaq.session.queueOutputData(nidaq.ao_data);

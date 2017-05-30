@@ -70,7 +70,7 @@ function S = preparePhotometryAcq(S)
         nidaq.channelsOn(end + 1) = 2;
     end
     
-    
+    % DO I NEED CHANNELNAMES NOW THAT i HAVE CHANNELSON? 5/29/17
     nidaq.ai_channelNames          = S.nidaq.ai_channelNames;       % 4 channels might make sense to have 2 supplementary channels for fast photodiodes measuring excitation light later
     nidaq.ai_data = [];
     % Define parameters for analog outputs.
