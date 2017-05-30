@@ -15,7 +15,7 @@ function demod = phDemod(rawData, refData, sampleRate, modRate, lowCutoff)
 %         tBaseline = []; % if empty, normalize (zscore) by entire range
 %     end
     
-    if size(rawData, 2) ~= 1 ||size(refData, 2) ~= 1
+    if size(rawData, 2) ~= 1 || size(refData, 2) ~= 1
         disp('*** Error in phDemod, refData and rawData must be column vectors ***');
         demod = [];
         return
@@ -24,7 +24,7 @@ function demod = phDemod(rawData, refData, sampleRate, modRate, lowCutoff)
 %     refData(:,1) = refData; 
 
     
-    if ~isstructure(refData)
+    if ~isstruct(refData)
         nSamples = length(rawData);
         refData = refData(1:nSamples,1); % shorten refData to same size as rawData    
         refData = refData - mean(refData); % *** get rid of DC offset!!!!
