@@ -54,12 +54,15 @@ function S = preparePhotometryAcq(S)
     maxDemodChannels = 2; % 
     
     % Define parameters for analog inputs and outputs
-    nidaq.LED1_f = S.nidaq.LED1_f;
-    nidaq.LED1_amp = S.GUI.LED1_amp;
-    nidaq.LED2_f = S.nidaq.LED2_f;
-    nidaq.LED2_amp = S.GUI.LED2_amp;    
-    nidaq.duration                 = S.nidaq.duration;
-    nidaq.sample_rate              = S.nidaq.sample_rate;
+%     nidaq.LED1_f = S.nidaq.LED1_f;
+%     nidaq.LED1_amp = S.GUI.LED1_amp;
+%     nidaq.LED2_f = S.nidaq.LED2_f;
+%     nidaq.LED2_amp = S.GUI.LED2_amp;    
+%     nidaq.duration                 = S.nidaq.duration;
+%     nidaq.sample_rate              = S.nidaq.sample_rate;
+
+% 5/29/17, use syncPhotometrySettings instead of above commented lines
+    syncPhotometrySettings;
     
     nidaq.channelsOn = [];
     if nidaq.LED1_amp > 0

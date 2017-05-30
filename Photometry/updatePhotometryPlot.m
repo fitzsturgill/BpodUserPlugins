@@ -6,6 +6,8 @@ function updatePhotometryPlot(Op, startX)
     end
     global BpodSystem nidaq
     
+    syncPhotometrySettings;
+
     Op = lower(Op);
     channelsOn = zeros(1,2);
     if nidaq.LED1_amp > 0
