@@ -16,7 +16,7 @@ function syncPhotometrySettings
     
     
     for counter = 1:length(syncFields)        
-        sf = syncfields{counter};
+        sf = syncFields{counter};
         
         try
             nidaq.(sf) = S.GUI.(sf);
