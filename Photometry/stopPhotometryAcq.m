@@ -3,9 +3,15 @@ function stopPhotometryAcq
     % output data 
     global nidaq
     
-    pause(0.05); % wait for hardware to stop, see error message below, I think this addresses the below error message:
-    %     Error using processNidaqData (line 15)
-    % Internal Error: The hardware did not report that it stopped before the timeout elapsed.
+    disp('trying to stop');
     nidaq.session.stop(); % Kills ~0.002 seconds after state matrix is done.
+    disp('right before wait');
     wait(nidaq.session);
+    disp('right after wait');
+%     while ~nidaq.session.IsDone
+%         pause(0.05);
+%         disp('stopPhotometryAcq: Waiting for Stop');
+%         nidaq.session.stop();
+%     end
+    disp(['nidaq IsDone status is ' num2str(nidaq.session.IsDone)]);
     nidaq.session.outputSingleScan(zeros(1, length(nidaq.channelsOn))); % make sure LEDs are turned off

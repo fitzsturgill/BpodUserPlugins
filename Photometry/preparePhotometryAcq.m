@@ -97,14 +97,14 @@ function S = preparePhotometryAcq(S)
     %% add inputs
     counter = 1;
     for ch = nidaq.channelsOn
-        nidaq.aiChannels{counter} = addAnalogInputChannel(nidaq.session,S.nidaq.Device,ch,'Voltage');
+        nidaq.aiChannels{counter} = addAnalogInputChannel(nidaq.session,S.nidaq.Device,ch - 1,'Voltage'); % - 1 because nidaq channels are zero based
         nidaq.aiChannels{counter}.TerminalConfig = 'SingleEnded';
         counter = counter + 1;
     end
     %% add outputs
     counter = 1;
     for ch = nidaq.channelsOn
-        nidaq.aoChannels{counter} = nidaq.session.addAnalogOutputChannel(S.nidaq.Device,ch, 'Voltage');
+        nidaq.aoChannels{counter} = nidaq.session.addAnalogOutputChannel(S.nidaq.Device,ch - 1, 'Voltage'); % - 1 because nidaq channels are zero based
         counter = counter + 1;
     end
 
