@@ -8,7 +8,7 @@ function phDemodOnline(currentTrial)
     
     for ch = nidaq.channelsOn
         nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,ch), nidaq.ao_data(:,ch), nidaq.sample_rate, LED1_f, lowCutoff);
-        nidaq.online.trialDemodData{currentTrial, ch} = decimate(nidaq.online.currentDemodData{:, ch}, decimationFactor);
+        nidaq.online.trialDemodData{currentTrial, } = decimate(nidaq.online.currentDemodData{1}, decimationFactor);
     end
 %         nidaq.online.currentDemodData{1} = NaN(size(nidaq.ai_data(:,1)));
 %     end

@@ -16,6 +16,8 @@ function updateLEDData(S)
         freq = S.nidaq.(['LED' num2str(ch) '_f']);
         amp = S.GUI.(['LED' num2str(ch) '_amp']);
         channelData = (sin(2*pi*freq*t + phaseShift) + 1) /2 * S.GUI.LED1_amp;
+%         channelData = [channelData; 0];
+        channelData(end) = 0;
         nidaq.ao_data = [nidaq.ao_data channelData];
         ref.phaseShift(end + 1) = phaseShift;
         ref.freq(end + 1) = freq;

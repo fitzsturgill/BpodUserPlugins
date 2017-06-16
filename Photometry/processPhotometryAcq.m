@@ -20,7 +20,7 @@ function processPhotometryAcq(currentTrial)
     
     if isempty(nidaq.ai_data)
         disp(num2str(toc));
-        error('WTF');
+        error('processPhotometryAcq: no data returned');
     else
         disp(num2str(toc));
     end
