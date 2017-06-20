@@ -3,15 +3,15 @@ function processNidaqData(src,event)
     % dataAvailableExceeds == SampleRate * Duration
     global nidaq
     
-    nidaq.ai_data = event.Data; % for non-continuous acquisition     
-    correctSamples = nidaq.duration * nidaq.sample_rate;
-    nSamples = size(nidaq.ai_data, 1);
-    samplesShort = correctSamples - nSamples;
-    if samplesShort > 0
-        nidaq.ai_data = [nidaq.ai_data; NaN(samplesShort, size(event.Data, 2))];
-    elseif samplesShort < 0
-        nidaq.ai_data = nidaq.ai_data(1:correctSamples, :);
-    end
+    nidaq.ai_data = [nidaq.ai_data; event.Data]; % for non-continuous acquisition
+%     correctSamples = nidaq.duration * nidaq.sample_rate;
+%     nSamples = size(nidaq.ai_data, 1);
+%     samplesShort = correctSamples - nSamples;
+%     if samplesShort > 0
+%         nidaq.ai_data = [nidaq.ai_data; NaN(samplesShort, size(event.Data, 2))];
+%     elseif samplesShort < 0
+%         nidaq.ai_data = nidaq.ai_data(1:correctSamples, :);
+%     end
 
 %     %     Error using processNidaqData (line 15)
 %     % Internal Error: The hardware did not report that it stopped before the timeout elapsed.

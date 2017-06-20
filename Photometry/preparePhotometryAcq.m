@@ -116,12 +116,12 @@ function S = preparePhotometryAcq(S)
     
     %% Sampling rate and continuous updating (important for queue-ing ao data)
     nidaq.session.Rate = nidaq.sample_rate;
-    nidaq.session.IsContinuous = false;
+    nidaq.session.IsContinuous = true;
     
     %% create and cue data for output, add callback function
     updateLEDData(S); 
     % data available notify must be set after queueing data
-    nidaq.session.NotifyWhenDataAvailableExceeds = nidaq.duration * nidaq.sample_rate; % at end of complete acquisition     
+    nidaq.session.NotifyWhenDataAvailableExceeds = nidaq.sample_rate; % fire event every second
     lh{1} = nidaq.session.addlistener('DataAvailable',@processNidaqData);
     
     

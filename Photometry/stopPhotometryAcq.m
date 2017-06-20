@@ -4,6 +4,7 @@ function stopPhotometryAcq
     global nidaq
     
     disp('trying to stop');
+    tic;
     nidaq.session.stop(); % Kills ~0.002 seconds after state matrix is done.
     disp('right before wait');
     wait(nidaq.session);
