@@ -3,16 +3,7 @@ function stopPhotometryAcq
     % output data 
     global nidaq
     
-    disp('trying to stop');
-    tic;
+
     nidaq.session.stop(); % Kills ~0.002 seconds after state matrix is done.
-    disp('right before wait');
     wait(nidaq.session);
-    disp('right after wait');
-%     while ~nidaq.session.IsDone
-%         pause(0.05);
-%         disp('stopPhotometryAcq: Waiting for Stop');
-%         nidaq.session.stop();
-%     end
-    disp(['nidaq IsDone status is ' num2str(nidaq.session.IsDone)]);
     nidaq.session.outputSingleScan(zeros(1, length(nidaq.channelsOn))); % make sure LEDs are turned off

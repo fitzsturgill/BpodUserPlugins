@@ -59,7 +59,8 @@ function S = initPhotometry(S)
 %     nidaq.duration                 = S.nidaq.duration;
 %     nidaq.sample_rate              = S.nidaq.sample_rate;
     syncPhotometrySettings; % 5/20/17   above commented lines handled by syncPhotometrySettings
-   
+    
+    
     nidaq.ai_channelNames          = S.nidaq.ai_channelNames;       % 4 channels might make sense to have 2 supplementary channels for fast photodiodes measuring excitation light later
     nidaq.ai_data = [];
     % Define parameters for analog outputs.

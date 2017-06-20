@@ -64,14 +64,14 @@ function S = preparePhotometryAcq(S)
 % 5/29/17, use syncPhotometrySettings instead of above commented lines
     syncPhotometrySettings;
     
-    nidaq.channelsOn = [];
-    if nidaq.LED1_amp > 0
-        nidaq.channelsOn(end + 1) = 1;
-    end
-    
-    if nidaq.LED2_amp > 0
-        nidaq.channelsOn(end + 1) = 2;
-    end
+%     nidaq.channelsOn = [];
+%     if nidaq.LED1_amp > 0
+%         nidaq.channelsOn(end + 1) = 1;
+%     end
+%     
+%     if nidaq.LED2_amp > 0
+%         nidaq.channelsOn(end + 1) = 2;
+%     end
     
     % DO I NEED CHANNELNAMES NOW THAT i HAVE CHANNELSON? 5/29/17
     nidaq.ai_channelNames          = S.nidaq.ai_channelNames;       % 4 channels might make sense to have 2 supplementary channels for fast photodiodes measuring excitation light later

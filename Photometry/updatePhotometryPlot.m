@@ -9,13 +9,8 @@ function updatePhotometryPlot(Op, startX)
     syncPhotometrySettings;
 
     Op = lower(Op);
-    channelsOn = zeros(1,2);
-    if nidaq.LED1_amp > 0
-        channelsOn(1) = 1;
-    end
-    if nidaq.LED2_amp > 0
-        channelsOn(2) = 1;
-    end
+    channelsOn = nidaq.channelsOn;
+
     switch Op
         case 'init'
             scrsz = get(groot,'ScreenSize'); 

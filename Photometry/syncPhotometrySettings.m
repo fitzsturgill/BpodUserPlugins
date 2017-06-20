@@ -27,6 +27,40 @@ function syncPhotometrySettings
             end
         end
     end
-            
+    
+    %% determine which channels are being acquired
+    nidaq.channelsOn = [];
+    ch1on = 0; ch2on = 0;
+    try
+        if S.GUI.ch1
+            ch1on = 1;
+        end
+    catch
+        if S.GUI.LED1_amp > 0
+            ch1on = 1;
+        end
+    end
+    
+    try
+        if S.GUI.ch2
+            ch2on = 1;
+        end
+    catch
+        if S.GUI.LED2_amp > 0
+            ch2on = 1;
+        end
+    end    
+    
+    if ch1on
+        nidaq.channelsOn = [nidaq.channelsOn 1];
+    end
+    
+    if ch2on
+        nidaq.channelsOn = [nidaq.channelsOn 2];
+    end
+    
+    if isempty(nidaq.channelsOn)
+        error('you need at least one acquisition channel turned on');
+    end
     
     
