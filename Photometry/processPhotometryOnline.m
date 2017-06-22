@@ -15,7 +15,7 @@ function processPhotometryOnline(currentTrial)
     trialBaselines = zeros(1,2);
     for ch = 1:2 % 2 channels are hard coded
         chData = nidaq.online.trialDemodData{currentTrial, ch};
-        bl = mean(chData(blStartP:blEndP));
+        bl = nanmean(chData(blStartP:blEndP));
         dFF = (chData - bl) ./ bl;
         BpodSystem.PluginObjects.Photometry.trialDFF{ch}(currentTrial, :) = dFF;
         trialBaselines(ch) = bl;
