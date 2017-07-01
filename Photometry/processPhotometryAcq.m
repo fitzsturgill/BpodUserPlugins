@@ -3,9 +3,9 @@ function processPhotometryAcq(currentTrial)
     
 %     wait(nidaq.session);
 %     wait('nidaq.session');
-%     while ~nidaq.session.IsDone
-%         pause(0.05);
-%     end
+    while ~nidaq.session.IsDone
+        pause(0.05);
+    end
 
 %     pause(0.1); 
 %     nidaq.session.stop() % Kills ~0.002 seconds after state matrix is done.
