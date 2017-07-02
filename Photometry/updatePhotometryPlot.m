@@ -20,7 +20,7 @@ function updatePhotometryPlot(Op, startX)
             if all(channelsOn)
                 BpodSystem.ProtocolFigures.NIDAQPanel1     = subplot(2,1,1);
                 BpodSystem.ProtocolFigures.NIDAQPanel2     = subplot(2,1,2);
-            elseif channelsOn(1)
+            elseif sum(channelsOn == 1)
                 BpodSystem.ProtocolFigures.NIDAQPanel1     = subplot(1,1,1);
             else
                 BpodSystem.ProtocolFigures.NIDAQPanel2     = subplot(1,1,1);
@@ -29,12 +29,12 @@ function updatePhotometryPlot(Op, startX)
         case 'update'
 
             xData = nidaq.online.currentXData + startX;
-            if channelsOn(1)
+            if sum(channelsOn == 1)
                 demod_ch1 = nidaq.online.currentDemodData{1};
                 plot(BpodSystem.ProtocolFigures.NIDAQPanel1,xData, demod_ch1);
             end
             
-            if channelsOn(2)
+            if sum(channelsOn == 2)
                 demod_ch2 = nidaq.online.currentDemodData{2};
                 plot(BpodSystem.ProtocolFigures.NIDAQPanel2,xData, demod_ch2);
             end
@@ -42,7 +42,7 @@ function updatePhotometryPlot(Op, startX)
             zoomFactor = 5; % scale y axis +/- zoomFactor standard deviations from the mean
 
 
-            if channelsOn(1)
+            if sum(channelsOn == 1)
                 ylabel(BpodSystem.ProtocolFigures.NIDAQPanel1,{'Ch1'});
                 m1 = mean(demod_ch1);
                 s1 = std(demod_ch1);
@@ -52,7 +52,7 @@ function updatePhotometryPlot(Op, startX)
                 end
             end
 
-            if channelsOn(2)
+            if sum(channelsOn == 2)
                 ylabel(BpodSystem.ProtocolFigures.NIDAQPanel2,{'Ch2'})
                 m2 = mean(demod_ch2);
                 s2 = std(demod_ch2);

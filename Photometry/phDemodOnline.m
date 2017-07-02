@@ -24,20 +24,17 @@ function phDemodOnline(currentTrial)
 
     
   %% pad or truncate if acquisition stopped short or long, but as of 8/15/16 this functionality is redundant- see processNidaqData
-    samplesShort = length(nidaq.online.currentXData) - length(nidaq.online.trialDemodData{currentTrial, 1});
-    if samplesShort > 0 % i.e. not 0
-        nidaq.online.trialDemodData{currentTrial, 1} = [nidaq.online.trialDemodData{currentTrial, 1}; zeros(samplesShort, 1)];
-        nidaq.online.trialDemodData{currentTrial, 2} = [nidaq.online.trialDemodData{currentTrial, 2}; zeros(samplesShort, 1)];        
-    elseif samplesShort < 0
-        nidaq.online.trialDemodData{currentTrial, 1} = nidaq.online.trialDemodData{currentTrial, 1}(1:length(nidaq.online.currentXData));
-        nidaq.online.trialDemodData{currentTrial, 2} = nidaq.online.trialDemodData{currentTrial, 2}(1:length(nidaq.online.currentXData));
-    end      
-    
-    nidaq.online.currentDemodData{1} = nidaq.online.trialDemodData{currentTrial, 1};
-    nidaq.online.currentDemodData{2} = nidaq.online.trialDemodData{currentTrial, 2};
-    %% downsample and save trial data
-    nidaq.online.trialXData = decimate(nidaq.online.currentXData, decimationFactor);
-    nidaq.online.trialDemodData{currentTrial, 1} = decimate(nidaq.online.currentDemodData{1}, decimationFactor);
-    nidaq.online.trialDemodData{currentTrial, 2} = decimate(nidaq.online.currentDemodData{2}, decimationFactor);    
-    
+    for ch = nidaq.channelsOn  
+        samplesShort = length(nidaq.online.currentXData) - length(nidaq.online.trialDemodData{currentTrial, ch});
+        if samplesShort > 0 % i.e. not 0
+            nidaq.online.trialDemodData{currentTrial, ch} = [nidaq.online.trialDemodData{currentTrial, ch}; zeros(samplesShort, 1)];       
+        elseif samplesShort < 0
+            nidaq.online.trialDemodData{currentTrial, ch} = nidaq.online.trialDemodData{currentTrial, ch}(1:length(nidaq.online.currentXData));
+        end      
 
+        nidaq.online.currentDemodData{ch} = nidaq.online.trialDemodData{currentTrial, ch};
+        %% downsample and save trial data
+        nidaq.online.trialDemodData{currentTrial, ch} = decimate(nidaq.online.currentDemodData{ch}, decimationFactor);
+    end
+    
+    nidaq.online.trialXData = decimate(nidaq.online.currentXData, decimationFactor);
