@@ -48,7 +48,8 @@ function S = initPhotometry(S)
         end
     end    
     
-    
+    %Note! (7/21/17- I need to not hard code what I have below (I don't
+    %think it matters because I just use it to create empty cell arrays)
     nDemodChannels = 2; % right now number of AM photometry channels hard coded == 2
     
     % Define parameters for analog inputs and outputs   
@@ -75,6 +76,9 @@ function S = initPhotometry(S)
     nidaq.online.trialXData = {};
     nidaq.online.trialDemodData = cell(1, nDemodChannels);
     nidaq.online.decimationFactor = 1000;
+    
+    % initialize Photometry variables within PluginObjects
+    BpodSystem.PluginObjects.Photometry.trialDFF = cell(1, nDemodChannels);
 
 
     % now session is re-created each trial 5/30/17, lines below no longer
