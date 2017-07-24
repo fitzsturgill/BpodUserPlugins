@@ -3,7 +3,7 @@ function demod = phDemod(rawData, refData, sampleRate, modRate, lowCutoff)
 % tBaseline-  baseline period, in seconds
 % lowCutoff corner frequency for 5-pole butterworth filter (lowpass),
 % default = [], i.e. no filtering is performed
-
+    global nidaq
     if nargin < 5
         lowCutoff = []; 
     end
@@ -37,14 +37,7 @@ function demod = phDemod(rawData, refData, sampleRate, modRate, lowCutoff)
         processedData_0 = rawData .* refData;
         processedData_90 = rawData .* refData90;
     else
-        phaseShift = rand(1) * 2 * pi;
-        freq = S.nidaq.(['LED' num2str(ch) '_f']);
-        amp = S.GUI.(['LED' num2str(ch) '_amp']);
-        channelData = (sin(2*pi*freq*t + phaseShift) + 1) /2 * S.GUI.LED1_amp;
-        nidaq.ao_data = [nidaq.ao_data channelData];
-        ref.phaseShift(end + 1) = phaseShift;
-        ref.freq(end + 1) = freq;
-        ref.amp(end + 1) = amp;
+        error(' refData mode not implemented- see phDemod_v2 and demodulateSession found in CSHL repo');
     end
     %% try filtering first
     % note-   5 pole Butterworth filter in Matlab used in Frohlich and McCormick  
