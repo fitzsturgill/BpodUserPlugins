@@ -40,12 +40,12 @@ function S = preparePhotometryAcq(S)
     
 %     set defaults
     for counter = 1:size(phDefaults, 1)
-        if ~isfield(S.nidaq, phDefaults{counter, 1});
+        if ~isfield(S.nidaq, phDefaults{counter, 1})
             S.nidaq.(phDefaults{counter, 1}) = phDefaults{counter, 2};
         end
     end
     for counter = 1:size(phGUIDefaults, 1)
-        if ~isfield(S.GUI, phGUIDefaults{counter, 1});
+        if ~isfield(S.GUI, phGUIDefaults{counter, 1})
             S.GUI.(phGUIDefaults{counter, 1}) = phGUIDefaults{counter, 2};
         end
     end    
@@ -116,7 +116,7 @@ function S = preparePhotometryAcq(S)
     
     %% Sampling rate and continuous updating (important for queue-ing ao data)
     nidaq.session.Rate = nidaq.sample_rate;
-    if floor(nidaq.session.Rate) ~= nidaq.sample_rate;
+    if floor(nidaq.session.Rate) ~= nidaq.sample_rate
         error('*** need to handle case where true sample rate < requested sample rate ***');
     end
     nidaq.session.IsContinuous = true;
