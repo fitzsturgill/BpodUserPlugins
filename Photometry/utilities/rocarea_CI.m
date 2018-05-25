@@ -106,8 +106,8 @@ if Nboot > 0
     end
     % compute confidence intervals from bootstrapped distributions
     CI = zeros(1,2);
-    CI(1) = percentile(Dboot, .05);
-    CI(2) = percentile(Dboot, .95);    
+    CI(1) = percentile(Dboot, .025);
+    CI(2) = percentile(Dboot, .975);    
 else
    P = 1;
    CI = [NaN NaN];
