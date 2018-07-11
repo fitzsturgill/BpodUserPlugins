@@ -24,6 +24,7 @@ function updateLEDData(S)
         ref.freq(end + 1) = freq;
         ref.amp(end + 1) = amp;
         ref.duration(end + 1) = nidaq.duration;
+        ref.sample_rate(end + 1) = nidaq.sample_rate;
     end
     ref.channelsOn = nidaq.channelsOn;
     nidaq.ref = ref;
