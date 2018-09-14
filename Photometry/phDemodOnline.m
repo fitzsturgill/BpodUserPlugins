@@ -3,11 +3,16 @@ function phDemodOnline(currentTrial)
 
     decimationFactor = nidaq.online.decimationFactor;
     lowCutoff = 15;
-    LED1_f = nidaq.LED1_f;
-    LED2_f = nidaq.LED2_f;
+    mod_freq = [nidaq.LED1_f nidaq.LED2_f];
     
     for ch = nidaq.channelsOn
-        nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,ch), nidaq.ao_data(:,ch), nidaq.sample_rate, LED1_f, lowCutoff);
+%         %kludge
+%         if mod_freq(ch)
+%             nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,ch) - mean(nidaq.ai_data(:,ch)), nidaq.ao_data(:,ch), nidaq.sample_rate, mod_freq(ch), lowCutoff);
+%         else
+%             nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,ch), nidaq.ao_data(:,ch), nidaq.sample_rate, mod_freq(ch), lowCutoff);
+%         end
+        nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,ch), nidaq.ao_data(:,ch), nidaq.sample_rate, mod_freq(ch), lowCutoff);
         nidaq.online.trialDemodData{currentTrial, ch} = nidaq.online.currentDemodData{:, ch};
     end
 %         nidaq.online.currentDemodData{1} = NaN(size(nidaq.ai_data(:,1)));

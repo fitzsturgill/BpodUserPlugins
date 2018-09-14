@@ -15,10 +15,13 @@ function updateLEDData(S)
         );
     for ch = nidaq.channelsOn
         phaseShift = rand(1) * 2 * pi;
-        freq = S.nidaq.(['LED' num2str(ch) '_f']);
-        amp = S.GUI.(['LED' num2str(ch) '_amp']);
-        channelData = (sin(2*pi*freq*t + phaseShift) + 1) /2 * amp;
-%         channelData = [channelData; 0];
+        freq = nidaq.(['LED' num2str(ch) '_f']);
+        amp = nidaq.(['LED' num2str(ch) '_amp']);
+        if freq % modulation mode
+            channelData = (sin(2*pi*freq*t + phaseShift) + 1) /2 * amp;
+        else % DC mode, if freq = 0;
+            channelData = zeros(size(t)) + amp / 2; % should be same mean amplitude as modulated, assuming that LED driver is linear
+        end
         channelData(end) = 0;
         nidaq.ao_data = [nidaq.ao_data channelData];
         ref.phaseShift(end + 1) = phaseShift;
