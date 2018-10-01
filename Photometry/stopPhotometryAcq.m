@@ -4,7 +4,7 @@ function stopPhotometryAcq
     global nidaq
     
   
-    if size(nidaq.ai_data, 1) < nidaq.duration * nidaq.sample_rate
+    while size(nidaq.ai_data, 1) < nidaq.duration * nidaq.sample_rate
         pause(0.05); % wait for processNidaqData to finish executing
     end
     nidaq.session.stop(); % Kills ~0.002 seconds after state matrix is done.
