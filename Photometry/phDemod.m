@@ -29,18 +29,19 @@ function demod = phDemod(rawData, refData, sampleRate, modRate, lowCutoff)
 
     % note-   5 pole Butterworth filter in Matlab used in Frohlich and McCormick  
      % Create butterworth filter
-    lowCutoff = lowCutoff/sampleRate * 2; % multiply by 2 to convert to rad/sample- see butter documentation
+    lowCutoff = lowCutoff/(sampleRate/2); % normalize to nyquist frequency
     % for a cutoff freq of 300Hz and sample rate of 1000Hz, cutoff
     % corresponds to 0.6pi rad/sample    300/1000 * 2 = 0.6    
-    [b, a] = butter(5, lowCutoff, 'low');   % double order of butterworth filter since I'm not using filtfilt
-
-
+    [z,p,k] = butter(5, lowCutoff, 'low');   % double order of butterworth filter since I'm not using filtfilt
+   [sos, g] = zp2sos(z,p,k);
+    [z,p,k] = butter(5, 25/(sampleRate/2), 'high');   % double order of butterworth filter since I'm not using filtfilt
+   [sos_ac, g_ac] = zp2sos(z,p,k);
     if modRate
         if ~isstruct(refData)
             nSamples = length(rawData);
             refData = refData(1:nSamples,1); % shorten refData to same size as rawData    
-            refData = refData - mean(refData); % *** get rid of DC offset!!!!
-
+            refData = filtfilt(sos_ac, g_ac, refData); % *** get rid of DC offset!!!!
+            rawData = filtfilt(sos_ac, g_ac, rawData);
             % generate 90degree shifted copy of refData
             samplesPerPeriod = 1/modRate / (1/sampleRate);
             quarterPeriod = round(samplesPerPeriod / 4); % ideally you shouldn't have to round, i.e. mod frequencies should be close to factors of sample freq
@@ -64,8 +65,8 @@ function demod = phDemod(rawData, refData, sampleRate, modRate, lowCutoff)
             % transient when the LED turns on
 
             %% for online analysis just use filt for speed (not filtfilt)
-            demodDataFilt_0 = filtfilt(b,a,[paddedData_0; processedData_0]);
-            demodDataFilt_90 = filtfilt(b,a,[paddedData_90; processedData_90]);        
+            demodDataFilt_0 = filtfilt(sos,g,[paddedData_0; processedData_0]);
+            demodDataFilt_90 = filtfilt(sos,g,[paddedData_90; processedData_90]);        
             demod_0 = demodDataFilt_0(length(paddedData_0) + 1:end, 1);
             demod_90 = demodDataFilt_90(length(paddedData_90)+1:end, 1);        
         else
@@ -76,18 +77,14 @@ function demod = phDemod(rawData, refData, sampleRate, modRate, lowCutoff)
         % correct for amplitude of reference 
         % Vsig = Vsig*Vref/2 + Vsig*Vref/2 * Cos(2*Fmod * time)
         % you filter out the second term
-        % multiply by two and divide by Vref to get Vsig
-        try % why am I demodulating both channels by default???  Note  3/28/17
-            modAmp = calcSinusoidAmp(refData);
-        catch
-            modAmp = 1;
-        end
-        demod = demod * 2 / modAmp;
+        % multiply by two given that Vref = 1;
+
+        demod = demod * 2;
       
     else %% Post 9/2018 kludge, if modRate = 0, then you are in the DC mode where you don't modulate the LEDs.  Therefore, don't demodulate the data, instead just filter and return
         if pad
             paddedData = rawData(1:sampleRate, 1);
-            demod = filtfilt(b,a,[paddedData; rawData]);
+            demod = filtfilt(sos,g,[paddedData; rawData]);
             demod = demod(length(paddedData) + 1:end, 1);
         end
     end
