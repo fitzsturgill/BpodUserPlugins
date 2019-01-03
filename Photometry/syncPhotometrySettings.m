@@ -11,9 +11,7 @@ function syncPhotometrySettings
     S = BpodSystem.ProtocolSettings;   
     
     % these fields will either be specified in 
-    syncFields = {'LED1_f', 'LED2_f', 'duration', 'sample_rate', 'LED1_amp', 'LED2_amp'};
-    
-    
+    syncFields = {'LED1_f', 'LED2_f', 'duration', 'sample_rate', 'LED1_amp', 'LED2_amp', 'IsContinuous', 'updateInterval'};    
     
     for counter = 1:length(syncFields)        
         sf = syncFields{counter};
