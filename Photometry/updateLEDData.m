@@ -3,8 +3,9 @@ function updateLEDData(S)
     global nidaq
 
     % generate output data
-    nidaq.dt = 1/nidaq.sample_rate;    
-    t = (0:nidaq.dt:nidaq.duration - nidaq.dt)'; %last sample starts dt prior to t = duration
+    nidaq.dt = 1/nidaq.session.Rate;    
+%     t = (0:nidaq.dt:nidaq.duration - nidaq.dt)'; %last sample starts dt prior to t = duration
+    t = (0:nidaq.dt:(nidaq.duration + 0.2))'; %add 200 extra samples 
     nidaq.ao_data = [];
     ref = struct(...
         'phaseShift', [],...
@@ -28,8 +29,9 @@ function updateLEDData(S)
         ref.freq(end + 1) = freq;
         ref.amp(end + 1) = amp;
         ref.duration(end + 1) = nidaq.duration;
-        ref.sample_rate(end + 1) = nidaq.sample_rate;
+        ref.sample_rate(end + 1) = nidaq.session.Rate;
     end
     ref.channelsOn = nidaq.channelsOn;
     nidaq.ref = ref;
     nidaq.session.queueOutputData(nidaq.ao_data);
+    display([num2str(size(nidaq.ao_data, 1)) ' samples queued']);

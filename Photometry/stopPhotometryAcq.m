@@ -3,9 +3,13 @@ function stopPhotometryAcq
     % output data 
     global nidaq
     
-  
-    while size(nidaq.ai_data, 1) < floor(nidaq.duration * nidaq.sample_rate) % - (0.1 * nidaq.sample_rate)
+    count = 0;
+    while size(nidaq.ai_data, 1) < floor(nidaq.duration * nidaq.session.Rate) % - (0.1 * nidaq.sample_rate)
+        get(nidaq.session, 'ScansOutputByHardware')
         pause(0.05); % wait for processNidaqData to finish executing
+        if count > 20
+            keyboard
+        end
     end
     nidaq.session.stop(); % Kills ~0.002 seconds after state matrix is done.
     wait(nidaq.session);

@@ -125,8 +125,9 @@ function S = preparePhotometryAcq(S)
     updateLEDData(S); 
     % data available notify must be set after queueing data
 %     nidaq.session.NotifyWhenDataAvailableExceeds = floor(nidaq.sample_rate * 0.1); % fire event every 0.1 seconds
-    nidaq.session.NotifyWhenDataAvailableExceeds = floor(nidaq.sample_rate * nidaq.duration); % fire only at the end of acquisition
+    nidaq.session.NotifyWhenDataAvailableExceeds = floor(nidaq.session.Rate * nidaq.duration); % fire only at the end of acquisition
     lh{1} = nidaq.session.addlistener('DataAvailable',@processNidaqData);
+    display(['data availableexceeds set at ' num2str(floor(nidaq.session.Rate * nidaq.duration))]);
     
     
     
