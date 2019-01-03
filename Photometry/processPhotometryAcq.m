@@ -3,9 +3,9 @@ function processPhotometryAcq(currentTrial)
     
 %     wait(nidaq.session);
 %     wait('nidaq.session');
-%     while ~nidaq.session.IsDone
-%         pause(0.05);
-%     end
+    while ~nidaq.session.IsDone
+        pause(0.05);
+    end
 
 %     pause(0.1); 
 %     nidaq.session.stop() % Kills ~0.002 seconds after state matrix is done.
@@ -14,15 +14,14 @@ function processPhotometryAcq(currentTrial)
     % ensure outputs reset to zerof
 %     nidaq.session.outputSingleScan(zeros(1,length(nidaq.aoChannels)));
 
-    %% Save data in BpodSystem format.
+    %% Save data in BpodSystem format.   
     BpodSystem.Data.NidaqData{currentTrial, 1} = nidaq.ai_data; %input data
-    BpodSystem.Data.NidaqData{currentTrial, 2} = nidaq.ao_data; % output data
+    BpodSystem.Data.NidaqData{currentTrial, 2} = nidaq.ref; % output data, now just parameters 5/29/17
     
-    if isempty(nidaq.ai_data)
-        disp(num2str(toc));
-        error('WTF');
-    else
-        disp(num2str(toc));
-    end
-    
+%     if isempty(nidaq.ai_data)
+%         error('processPhotometryAcq: no data returned');
+%     else
+%         disp(num2str(toc));
+%     end
+%     
     

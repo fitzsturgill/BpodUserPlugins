@@ -4,6 +4,7 @@ function slaveResponse = updateValveSlave(so, valve)
     pause(0.05);
     try
         slaveResponse = fread(so);
+        slaveResponse = slaveResponse(1); % to handle error where fread doesn't just pull 1 number (not sure why this is very occasionally happening)
     catch
         slaveReponse = [];
     end
