@@ -3,7 +3,7 @@ function S = initPhotometry(S)
     %% NIDAQ :: Set up NIDAQ data aquisision
     global nidaq BpodSystem
 
-    daq.reset; % I'm testing re-initializing nidaq with every acquisition- see preparePhotometryAcq
+    daq.reset; % currently re-initializing nidaq with every acquisition- see preparePhotometryAcq
     
     % retrieve machine specific settings
     try
@@ -26,6 +26,8 @@ function S = initPhotometry(S)
 %         'sample_rate', 6100;...
 %         'ai_channelNames', {'ai0','ai1','ai2'};...
 %         'ao_channelNames', {'ao0', 'ao1'};...
+%         'IsContinuous', 0;... % whether to save all data at end of acquisition or intermittently (advantage of at end is that you acquire exactly the right number of samples for your behavioral trial, advantage of intermittently is that you can have more flexible acquisitions (say if mouse behavior terminates trial early)
+%         'updateInterval', 0.1;... % when isContinuous = 1, controls how frequently new data is pulled off the nidaq card for saving
 %         };
 %     % defaults linked to Bpod parameter GUI
 %     phGUIDefaults = {...

@@ -1,11 +1,15 @@
-function updateLEDData(S)
+function updateLEDData
     % updated 4/21/2017
     global nidaq
 
     % generate output data
     nidaq.dt = 1/nidaq.session.Rate;    
 %     t = (0:nidaq.dt:nidaq.duration - nidaq.dt)'; %last sample starts dt prior to t = duration
-    t = (0:nidaq.dt:(nidaq.duration + 0.2))'; %add 200 extra samples 
+    if nidaq.IsContinuous
+        t = (0:nidaq.dt:(nidaq.duration + rem(nidaq.duration, nidaq.updateInterval)))'; % pad output data so that it is an integer multiple of updateInterval so that you can save the last snippet of data      
+    else
+        t = (0:nidaq.dt:(nidaq.duration + 0.2))'; %add 200 extra samples to ensure that you have enough output data to satisfy NotifyWhenDataAvailableExceeds property
+    end
     nidaq.ao_data = [];
     ref = struct(...
         'phaseShift', [],...

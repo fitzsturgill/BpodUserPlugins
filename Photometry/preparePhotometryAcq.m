@@ -53,28 +53,11 @@ function S = preparePhotometryAcq(S)
     
     maxDemodChannels = 2; % 
     
-    % Define parameters for analog inputs and outputs
-%     nidaq.LED1_f = S.nidaq.LED1_f;
-%     nidaq.LED1_amp = S.GUI.LED1_amp;
-%     nidaq.LED2_f = S.nidaq.LED2_f;
-%     nidaq.LED2_amp = S.GUI.LED2_amp;    
-%     nidaq.duration                 = S.nidaq.duration;
-%     nidaq.sample_rate              = S.nidaq.sample_rate;
-
-% 5/29/17, use syncPhotometrySettings instead of above commented lines
+% sync nidaq settings (part of BpodSystem.Settings) with nidaq structure (containing nidaq session)
     syncPhotometrySettings;
     
-%     nidaq.channelsOn = [];
-%     if nidaq.LED1_amp > 0
-%         nidaq.channelsOn(end + 1) = 1;
-%     end
-%     
-%     if nidaq.LED2_amp > 0
-%         nidaq.channelsOn(end + 1) = 2;
-%     end
-    
-    % DO I NEED CHANNELNAMES NOW THAT i HAVE CHANNELSON? 5/29/17
-    nidaq.ai_channelNames          = S.nidaq.ai_channelNames;       % 4 channels might make sense to have 2 supplementary channels for fast photodiodes measuring excitation light later
+    % DO I NEED CHANNELNAMES NOW THAT i HAVE CHANNELS ON? 5/29/17
+    nidaq.ai_channelNames          = S.nidaq.ai_channelNames;       
     nidaq.ai_data = [];
     % Define parameters for analog outputs.
     nidaq.ao_channelNames          = S.nidaq.ao_channelNames;
@@ -119,13 +102,21 @@ function S = preparePhotometryAcq(S)
     if floor(nidaq.session.Rate) ~= nidaq.sample_rate
         error('*** need to handle case where true sample rate < requested sample rate ***');
     end
-    nidaq.session.IsContinuous = true;
+    
+    if nidaq.IsContinuous
+        nidaq.session.IsContinuous = true;
+    else
+        nidaq.session.IsContinuous = false; % would work with this set to true as well since setting the samples acquired callback to be equal to acq duration effectively makes it non-continous
+    end
     
     %% create and cue data for output, add callback function
-    updateLEDData(S); 
+    updateLEDData; 
     % data available notify must be set after queueing data
-%     nidaq.session.NotifyWhenDataAvailableExceeds = floor(nidaq.sample_rate * 0.1); % fire event every 0.1 seconds
-    nidaq.session.NotifyWhenDataAvailableExceeds = floor(nidaq.session.Rate * nidaq.duration); % fire only at the end of acquisition
+    if nidaq.IsContinuous
+        nidaq.session.NotifyWhenDataAvailableExceeds = floor(nidaq.session.Rate * nidaq.updateInterval);         
+    else
+        nidaq.session.NotifyWhenDataAvailableExceeds = floor(nidaq.session.Rate * nidaq.duration); % fire only at the end of acquisition
+    end
     lh{1} = nidaq.session.addlistener('DataAvailable',@processNidaqData);
     display(['data availableexceeds set at ' num2str(floor(nidaq.session.Rate * nidaq.duration))]);
     
