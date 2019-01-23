@@ -15,9 +15,9 @@ function out = onlineFilterTrials(types, outcomes, epochs)
         out = ismember(BpodSystem.Data.TrialTypes(1:nTrials), types) & ismember(BpodSystem.Data.TrialOutcome(1:nTrials), outcomes);
     end
     
-    if ~isempty(epochs)
-        out = ismember(BpodSystem.Data.Epoch, epochs) & out;
-    end
+%     if ~isempty(epochs)
+%         out = ismember(BpodSystem.Data.Epoch, epochs) & out;
+%     end
     out = find(out);
     
     
