@@ -28,14 +28,18 @@ function phDemodOnline(currentTrial)
     nidaq.online.currentXData = nidaq.online.currentXData(:); % make column vector
 
     
-  %% pad or truncate if acquisition stopped short or long, but as of 8/15/16 this functionality is redundant- see processNidaqData
+  %% pad or truncate if acquisition stopped short or long
     for ch = nidaq.channelsOn  
-        samplesShort = length(nidaq.online.currentXData) - length(nidaq.online.trialDemodData{currentTrial, ch});
-        if samplesShort > 0 % i.e. not 0
-            nidaq.online.trialDemodData{currentTrial, ch} = [nidaq.online.trialDemodData{currentTrial, ch}; zeros(samplesShort, 1)];       
-        elseif samplesShort < 0
-            nidaq.online.trialDemodData{currentTrial, ch} = nidaq.online.trialDemodData{currentTrial, ch}(1:length(nidaq.online.currentXData));
-        end      
+        if ~nidaq.IsContinuous
+            samplesShort = length(nidaq.online.currentXData) - length(nidaq.online.trialDemodData{currentTrial, ch});
+            if samplesShort > 0 % i.e. not 0
+                nidaq.online.trialDemodData{currentTrial, ch} = [nidaq.online.trialDemodData{currentTrial, ch}; zeros(samplesShort, 1)];       
+            elseif samplesShort < 0
+                nidaq.online.trialDemodData{currentTrial, ch} = nidaq.online.trialDemodData{currentTrial, ch}(1:length(nidaq.online.currentXData));
+            end     
+        else
+            nidaq.online.currentXData = nidaq.online.currentXData(1:size(nidaq.online.currentDemodData{ch}, 1));
+        end
 
         nidaq.online.currentDemodData{ch} = nidaq.online.trialDemodData{currentTrial, ch};
         %% downsample and save trial data
