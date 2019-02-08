@@ -84,6 +84,12 @@ function S = preparePhotometryAcq(S)
         nidaq.aiChannels{counter}.TerminalConfig = 'SingleEnded';
         counter = counter + 1;
     end
+    %% add aux inputs, slightly different style, store channels as channels objects
+    if any(nidaq.auxChannelsOn)
+        nidaq.auxChannels = addAnalogInputChannel(nidaq.session,S.nidaq.Device,nidaq.auxChannelNumbers,'Voltage'); % - 1 because nidaq channels are zero based
+        nidaq.auxChannels.TerminalConfig = 'SingleEnded';
+    end
+    
     %% add outputs
     counter = 1;
     for ch = nidaq.channelsOn
