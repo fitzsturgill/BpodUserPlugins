@@ -40,28 +40,25 @@ function S = initPhotometry(S)
     
 %     set defaults
     for counter = 1:size(phDefaults, 1)
-        if ~isfield(S.nidaq, phDefaults{counter, 1});
+        if ~isfield(S.nidaq, phDefaults{counter, 1})
             S.nidaq.(phDefaults{counter, 1}) = phDefaults{counter, 2};
         end
     end
     for counter = 1:size(phGUIDefaults, 1)
-        if ~isfield(S.GUI, phGUIDefaults{counter, 1});
+        if ~isfield(S.GUI, phGUIDefaults{counter, 1})
             S.GUI.(phGUIDefaults{counter, 1}) = phGUIDefaults{counter, 2};
         end
     end    
     
-    %Note! (7/21/17- I need to not hard code what I have below (I don't
-    %think it matters because I just use it to create empty cell arrays)
+    %Note! 7/21/17- stupid to hard code nDemodChannels (But it doesn't
+    %matter because it is just used to initialize empty cell arrays)
     nDemodChannels = 2; % right now number of AM photometry channels hard coded == 2
     
-    % Define parameters for analog inputs and outputs   
-%     nidaq.LED1_f = S.nidaq.LED1_f;
-%     nidaq.LED1_amp = S.GUI.LED1_amp;
-%     nidaq.LED2_f = S.nidaq.LED2_f;
-%     nidaq.LED2_amp = S.GUI.LED2_amp;    
-%     nidaq.duration                 = S.nidaq.duration;
-%     nidaq.sample_rate              = S.nidaq.sample_rate;
-    syncPhotometrySettings; % 5/20/17   above commented lines handled by syncPhotometrySettings
+    % SYNCHRONIZE NIDAQ GLOBAL VARIABLE:
+    % synchronize current settings between maching-specific defaults,
+    % settings hard coded in protocol (   S.nidaq.(exampleField)  )   and
+    % settings selected in GUI   (      S.GUI.(exampleField)      )    
+    syncPhotometrySettings; % 5/20/17   
     
     
     nidaq.ai_channelNames          = S.nidaq.ai_channelNames;       % 4 channels might make sense to have 2 supplementary channels for fast photodiodes measuring excitation light later
@@ -82,41 +79,3 @@ function S = initPhotometry(S)
     % initialize Photometry variables within PluginObjects
     BpodSystem.PluginObjects.Photometry.trialDFF = cell(1, nDemodChannels);
 
-
-    % now session is re-created each trial 5/30/17, lines below no longer
-    % needed
-%     %% Set up session and channels
-%     nidaq.session = daq.createSession('ni');
-%     
-% 
-%     %% add inputs
-%     counter = 1;
-%     for ch = nidaq.ai_channelNames
-%         nidaq.aiChannels{counter} = addAnalogInputChannel(nidaq.session,S.nidaq.Device,ch,'Voltage');
-%         nidaq.aiChannels{counter}.TerminalConfig = 'SingleEnded';
-%         counter = counter + 1;
-%     end
-%     %% add outputs
-%     counter = 1;
-%     for ch = nidaq.ao_channelNames
-%         nidaq.aoChannels{counter} = nidaq.session.addAnalogOutputChannel(S.nidaq.Device,ch, 'Voltage');
-%         counter = counter + 1;
-%     end
-% 
-%     %% add trigger external trigger, if specified
-%     if S.nidaq.TriggerConnection
-%         addTriggerConnection(nidaq.session, 'external', [S.nidaq.Device '/' S.nidaq.TriggerSource], 'StartTrigger');
-%         nidaq.session.ExternalTriggerTimeout = 900; % something really long (15min), might be necessary during freely moving behavior when animal doesn't re-initiate trial for a while
-%     end
-%     
-%     %% Sampling rate and continuous updating (important for queue-ing ao data)
-%     nidaq.session.Rate = nidaq.sample_rate;
-%     nidaq.session.IsContinuous = false;
-%     
-%     %% create and cue data for output, add callback function
-%     updateLEDData(S); 
-%     % data available notify must be set after queueing data
-%     nidaq.session.NotifyWhenDataAvailableExceeds = nidaq.duration * nidaq.sample_rate; % at end of complete acquisition     
-%     lh{1} = nidaq.session.addlistener('DataAvailable',@processNidaqData);
-% 
-%   
