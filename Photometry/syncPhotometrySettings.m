@@ -64,14 +64,13 @@ function syncPhotometrySettings
     %% determine which aux channels are being acquired, use table GUI element for this
     nidaq.auxChannelsOn = [];
     nidaq.auxDownsample = []; % downsampled rates for each channel
-    nidaq.auxChannelNames = {}; % to be used in future
+%     nidaq.auxChannelNames = {}; % to be used in future
     nidaq.auxChannelNumbers = []; % which AI port on NI breakout board (e.g. 3 for AI3)
     
-    if isfield(S.GUI, 'aux')
-        nidaq.auxChannelsOn = find(S.GUI.aux.active);
-        nidaq.auxDownsample = S.GUI.aux.downsample(nidaq.auxChannelsOn);
-        nidaq.auxChannelNames = S.GUI.aux.auxChannelNames(nidaq.auxChannelsOn);
-        nidaq.auxChannelNumbers = S.GUI.aux.auxChannelNumbers(nidaq.auxChannelsOn);
+    if isfield(S.GUI, 'Aux')
+        nidaq.auxChannelsOn = find(S.GUI.Aux.channelsOn);
+        nidaq.auxDownsample = S.GUI.Aux.downsample(nidaq.auxChannelsOn);
+        nidaq.auxChannelNumbers = S.GUI.Aux.channelNumbers(nidaq.auxChannelsOn);
     end
         
     

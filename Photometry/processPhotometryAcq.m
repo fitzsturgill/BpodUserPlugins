@@ -22,7 +22,7 @@ function processPhotometryAcq(currentTrial)
     if ~isempty(nidaq.auxChannelsOn)
         
         BpodSystem.Data.AuxSettings(currentTrial).auxDownsample = nidaq.auxDownsample;
-        BpodSystem.Data.AuxSettings(currentTrial).auxChannelNames = nidaq.auxChannelNames;
+%         BpodSystem.Data.AuxSettings(currentTrial).auxChannelNames = nidaq.auxChannelNames;
         BpodSystem.Data.AuxSettings(currentTrial).auxChannelNumbers = nidaq.auxChannelNumbers;
         BpodSystem.Data.AuxSettings(currentTrial).auxChannelsOn = nidaq.auxChannelsOn;
         
