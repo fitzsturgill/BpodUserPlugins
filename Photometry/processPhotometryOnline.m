@@ -1,5 +1,4 @@
 function processPhotometryOnline(currentTrial)
-    global nidaq
     % calculate baseline F and dF/F, this function is seperate from
     % phDemodOnline because you need a baseline period which is specific to
     % a given behavioral protocol
