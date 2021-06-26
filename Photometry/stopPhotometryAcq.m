@@ -5,8 +5,9 @@ function stopPhotometryAcq
     
 
     if    ~nidaq.IsContinuous % for non-continuous mode you want to wait for whole nidaq acquisition to terminate
-    %     count = 0;        
-        while size(nidaq.ai_data, 1) < floor(nidaq.duration * nidaq.session.Rate) % - (0.1 * nidaq.sample_rate)
+    %     count = 0;
+        tic
+        while (size(nidaq.ai_data, 1) < floor(nidaq.duration * nidaq.session.Rate)) && (toc < 20) % - (0.1 * nidaq.sample_rate)
     %         get(nidaq.session, 'ScansOutputByHardware')
             pause(0.05); % wait for processNidaqData to finish executing
     %         if count > 20

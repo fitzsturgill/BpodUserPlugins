@@ -26,7 +26,7 @@ function syncPhotometrySettings
         end
     end
     
-    %% determine which channels are being acquired
+    %% determine which channels are being acquired and sync the nidaq.channelsOn list, too.
     nidaq.channelsOn = [];
     ch1on = 0; ch2on = 0;
     try
@@ -34,7 +34,7 @@ function syncPhotometrySettings
             ch1on = 1;
         end
     catch
-        if S.GUI.LED1_amp > 0
+        if S.GUI.LED1_amp > 0 % for backwards compatibility, I used to let LED amp determine whether trial is acquired.  This became undesireable- e.g. if you want to look at crosstalk from one channel to another.
             ch1on = 1;
         end
     end
@@ -50,15 +50,28 @@ function syncPhotometrySettings
     end    
     
     if ch1on
-        nidaq.channelsOn = [nidaq.channelsOn 1];
+        nidaq.channelsOn = union(nidaq.channelsOn, 1);
     end
     
     if ch2on
-        nidaq.channelsOn = [nidaq.channelsOn 2];
+        nidaq.channelsOn = union(nidaq.channelsOn, 2);
     end
     
     if isempty(nidaq.channelsOn)
         error('you need at least one acquisition channel turned on');
     end
+    
+    %% determine which aux channels are being acquired, use table GUI element for this
+    nidaq.auxChannelsOn = [];
+    nidaq.auxDownsample = []; % downsampled rates for each channel
+%     nidaq.auxChannelNames = {}; % to be used in future
+    nidaq.auxChannelNumbers = []; % which AI port on NI breakout board (e.g. 3 for AI3)
+    
+    if isfield(S.GUI, 'Aux')
+        nidaq.auxChannelsOn = find(S.GUI.Aux.channelsOn);
+        nidaq.auxDownsample = S.GUI.Aux.downsample(nidaq.auxChannelsOn);
+        nidaq.auxChannelNumbers = S.GUI.Aux.channelNumbers(nidaq.auxChannelsOn);
+    end
+        
     
     

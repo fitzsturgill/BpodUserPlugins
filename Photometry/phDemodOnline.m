@@ -7,7 +7,6 @@ function phDemodOnline(currentTrial)
     
     for counter = 1:length(nidaq.channelsOn)
         ch = nidaq.channelsOn(counter);
-%     for ch = nidaq.channelsOn
 %         %kludge
 %         if mod_freq(ch)
 %             nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,ch) - mean(nidaq.ai_data(:,ch)), nidaq.ao_data(:,ch), nidaq.sample_rate, mod_freq(ch), lowCutoff);
