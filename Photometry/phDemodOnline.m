@@ -5,14 +5,15 @@ function phDemodOnline(currentTrial)
     lowCutoff = 15;
     mod_freq = [nidaq.LED1_f nidaq.LED2_f];
     
-    for ch = nidaq.channelsOn
+    for counter = 1:length(nidaq.channelsOn)
+        ch = nidaq.channelsOn(counter);
 %         %kludge
 %         if mod_freq(ch)
 %             nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,ch) - mean(nidaq.ai_data(:,ch)), nidaq.ao_data(:,ch), nidaq.sample_rate, mod_freq(ch), lowCutoff);
 %         else
 %             nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,ch), nidaq.ao_data(:,ch), nidaq.sample_rate, mod_freq(ch), lowCutoff);
 %         end
-        nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,ch), nidaq.ao_data(:,ch), nidaq.sample_rate, mod_freq(ch), lowCutoff);
+        nidaq.online.currentDemodData{ch} = phDemod(nidaq.ai_data(:,counter), nidaq.ao_data(:,counter), nidaq.sample_rate, mod_freq(ch), lowCutoff);
         nidaq.online.trialDemodData{currentTrial, ch} = nidaq.online.currentDemodData{:, ch};
     end
 %         nidaq.online.currentDemodData{1} = NaN(size(nidaq.ai_data(:,1)));

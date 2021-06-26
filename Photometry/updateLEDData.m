@@ -6,7 +6,9 @@ function updateLEDData
     nidaq.dt = 1/nidaq.session.Rate;    
 %     t = (0:nidaq.dt:nidaq.duration - nidaq.dt)'; %last sample starts dt prior to t = duration
     if nidaq.IsContinuous
-        t = (0:nidaq.dt:(nidaq.duration + rem(nidaq.duration, nidaq.updateInterval)))'; % pad output data so that it is an integer multiple of updateInterval so that you can save the last snippet of data      
+        % 10/26/20  added an extra 0.2 seconds to see if this avoids matlab
+        % freezing
+        t = (0:nidaq.dt:(nidaq.duration + rem(nidaq.duration, nidaq.updateInterval) + 0.2))'; % pad output data so that it is an integer multiple of updateInterval so that you can save the last snippet of data      
     else
         t = (0:nidaq.dt:(nidaq.duration + 0.2))'; %add 200 extra samples to ensure that you have enough output data to satisfy NotifyWhenDataAvailableExceeds property
     end

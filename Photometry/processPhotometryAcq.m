@@ -3,8 +3,12 @@ function processPhotometryAcq(currentTrial)
     
 %     wait(nidaq.session);
 %     wait('nidaq.session');
+    tic
     while ~nidaq.session.IsDone
         pause(0.05);
+        if toc > 120
+            error('what is going on');
+        end
     end
 
 %     pause(0.1); 

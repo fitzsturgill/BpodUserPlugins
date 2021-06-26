@@ -80,9 +80,11 @@ function S = preparePhotometryAcq(S)
     %% add inputs
     counter = 1;
     for ch = nidaq.channelsOn
-        nidaq.aiChannels{counter} = addAnalogInputChannel(nidaq.session,S.nidaq.Device,ch - 1,'Voltage'); % - 1 because nidaq channels are zero based
-        nidaq.aiChannels{counter}.TerminalConfig = 'SingleEnded';
-        counter = counter + 1;
+        if length(nidaq.session.Channels) < counter
+            nidaq.aiChannels{counter} = addAnalogInputChannel(nidaq.session,S.nidaq.Device,ch - 1,'Voltage'); % - 1 because nidaq channels are zero based
+            nidaq.aiChannels{counter}.TerminalConfig = 'SingleEnded';
+            counter = counter + 1;
+        end
     end
     %% add aux inputs, slightly different style, store channels as channels objects
     if any(nidaq.auxChannelsOn)
@@ -93,8 +95,10 @@ function S = preparePhotometryAcq(S)
     %% add outputs
     counter = 1;
     for ch = nidaq.channelsOn
-        nidaq.aoChannels{counter} = nidaq.session.addAnalogOutputChannel(S.nidaq.Device,ch - 1, 'Voltage'); % - 1 because nidaq channels are zero based
-        counter = counter + 1;
+        if length(nidaq.session.Channels) < (counter + length(nidaq.session.Channels))
+            nidaq.aoChannels{counter} = nidaq.session.addAnalogOutputChannel(S.nidaq.Device,ch - 1, 'Voltage'); % - 1 because nidaq channels are zero based
+            counter = counter + 1;
+        end
     end
 
     %% add trigger external trigger, if specified
@@ -104,27 +108,33 @@ function S = preparePhotometryAcq(S)
     end
     
     %% Sampling rate and continuous updating (important for queue-ing ao data)
+
     nidaq.session.Rate = nidaq.sample_rate;
     if floor(nidaq.session.Rate) ~= nidaq.sample_rate
         error('*** need to handle case where true sample rate < requested sample rate ***');
     end
-    
+
     if nidaq.IsContinuous
         nidaq.session.IsContinuous = true;
     else
         nidaq.session.IsContinuous = false; % would work with this set to true as well since setting the samples acquired callback to be equal to acq duration effectively makes it non-continous
     end
     
+    
     %% create and cue data for output, add callback function
     updateLEDData; 
     % data available notify must be set after queueing data
     if nidaq.IsContinuous
         nidaq.session.NotifyWhenDataAvailableExceeds = floor(nidaq.session.Rate * nidaq.updateInterval);         
+        display(['data availableexceeds set at ' num2str(floor(nidaq.session.Rate * nidaq.updateInterval))]);
     else
         nidaq.session.NotifyWhenDataAvailableExceeds = floor(nidaq.session.Rate * nidaq.duration); % fire only at the end of acquisition
+        display(['data availableexceeds set at ' num2str(floor(nidaq.session.Rate * nidaq.duration))]);
     end
+
     lh{1} = nidaq.session.addlistener('DataAvailable',@processNidaqData);
-    display(['data availableexceeds set at ' num2str(floor(nidaq.session.Rate * nidaq.duration))]);
+
+    
     
     
     
